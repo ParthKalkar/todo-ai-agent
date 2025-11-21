@@ -37,8 +37,8 @@ A sophisticated AI agent system that transforms high-level goals into structured
 
 1. **Clone and setup environment:**
 ```bash
-git clone <repository-url>
-cd libra-case-study
+git clone https://github.com/ParthKalkar/todo-ai-agent.git
+cd todo-ai-agent
 python -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
@@ -145,7 +145,7 @@ Access system metrics at: `http://127.0.0.1:8000/metrics`
 ## 🏗️ Architecture
 
 ```
-libra-case-study/
+todo-ai-agent/
 ├── agent/                    # Core agent logic
 │   ├── planner.py           # LLM-powered task planning
 │   ├── executor.py          # Task execution with resilience
