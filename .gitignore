@@ -1,0 +1,21 @@
+# Local environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Node
+node_modules/
+
+# Editor
+.vscode/
+
+# Logs
+*.log
+server.log
+
+# OS
+.DS_Store
+Thumbs.db

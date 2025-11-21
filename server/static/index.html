@@ -1,0 +1,396 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agent Stream UI</title>
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #071427;
+      --muted: #9fb3d4;
+      --accent: #39a0ff;
+      --success: #2ecc71;
+      --danger: #ff6b6b;
+      --text: #e6eef8;
+    }
+    
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --muted: #64748b;
+      --accent: #3b82f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --text: #1e293b;
+    }
+    
+    html, body { height: 100%; }
+    body { 
+      font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; 
+      margin: 0; 
+      background: var(--bg); 
+      color: var(--text);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    header { padding:14px 20px; background:#071023; border-bottom:1px solid rgba(15,23,42,.6); display:flex; align-items:center; justify-content:space-between }
+    header .title { font-weight:600 }
+    .wrap { display:flex; gap:12px; height:calc(100vh - 64px); padding:16px }
+    .col { background:var(--panel); border-radius:10px; padding:12px; box-sizing:border-box }
+    .left { width:360px; display:flex; flex-direction:column; gap:12px }
+    .center { flex:1; display:flex; flex-direction:column }
+    .right { width:520px; display:flex; flex-direction:column }
+    .controls { display:flex; flex-direction:column; gap:8px }
+    textarea, input[type=number] { width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:#071627; color:inherit }
+    button { background:var(--accent); color:white; border:0; padding:8px 12px; border-radius:6px; cursor:pointer }
+    .muted { color:var(--muted); font-size:13px }
+    .stream { flex:1; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', monospace; font-size:13px; padding:8px; border-radius:6px }
+    .event { padding:10px; border-radius:8px; margin-bottom:8px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02)); }
+    .meta { color:var(--muted); font-size:12px; margin-bottom:6px }
+    .badge { display:inline-block; padding:4px 8px; border-radius:999px; font-size:12px; margin-right:6px }
+    .badge.plan { background:rgba(57,160,255,0.12); color:var(--accent) }
+    .badge.start { background:rgba(255,195,0,0.08); color:#ffd166 }
+    .badge.result { background:rgba(46,204,113,0.08); color:var(--success) }
+    .badge.preview { background:rgba(156,39,176,0.06); color:#b388eb }
+    .badge.error { background:rgba(255,107,107,0.06); color:var(--danger) }
+    .preview { width:100%; height:100%; border:0; border-radius:8px }
+    .progress-bar { width:100%; height:8px; background:#071627; border-radius:4px; overflow:hidden; margin:8px 0; }
+    .progress-fill { height:100%; background:linear-gradient(90deg,#39a0ff,#2ecc71); transition:width 0.3s ease; }
+    .task-progress { display:flex; align-items:center; gap:8px; margin:4px 0; }
+    .task-progress .status { font-size:12px; color:var(--muted); }
+    .example-btn {
+      background: rgba(57,160,255,0.1);
+      border: 1px solid rgba(57,160,255,0.3);
+      color: var(--accent);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .example-btn:hover {
+      background: rgba(57,160,255,0.2);
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="font-size: 24px;">🤖</div>
+      <div>
+        <div class="title" style="font-size: 18px; font-weight: 600;">Agent Executor</div>
+        <div style="font-size: 12px; color: var(--muted);">AI-powered task automation</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="https://github.com/yourusername/agent-executor" target="_blank" style="color: var(--accent); text-decoration: none; font-size: 14px;">⭐ Star on GitHub</a>
+      <button id="themeToggle" style="background: none; border: none; color: var(--text); cursor: pointer; font-size: 18px; padding: 4px;">🌙</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <div class="col left">
+      <!-- Welcome Section -->
+      <div style="background: linear-gradient(135deg, rgba(57,160,255,0.1), rgba(46,204,113,0.1)); border: 1px solid rgba(57,160,255,0.2); border-radius: 8px; padding: 16px; margin-bottom: 12px;">
+        <h3 style="margin: 0 0 8px 0; color: var(--accent);">✨ Welcome to Agent Executor</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 1.4; color: var(--text);">
+          Transform your ideas into action! Enter any goal and watch as AI breaks it down into executable tasks with real-time progress tracking.
+        </p>
+      </div>
+
+      <div class="controls">
+        <div><strong>🚀 Start a New Run</strong></div>
+        <div class="muted small">Describe your goal in natural language. Our AI agent will plan, execute, and deliver results with full transparency.</div>
+        <textarea id="goal" rows="4" placeholder="Create a landing page that captures emails and offers a coupon.">Create a beautiful landing page that captures emails and offers a 20% coupon.</textarea>
+
+        <!-- Example Goals -->
+        <div style="margin-top: 8px;">
+          <div class="muted small" style="margin-bottom: 4px;">💡 Try these examples:</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+            <button class="example-btn" onclick="setGoal('Build a REST API for user management with FastAPI')">API Development</button>
+            <button class="example-btn" onclick="setGoal('Create a data visualization dashboard with charts')">Data Dashboard</button>
+            <button class="example-btn" onclick="setGoal('Set up a CI/CD pipeline for a Python project')">DevOps Setup</button>
+            <button class="example-btn" onclick="setGoal('Design a mobile app user interface mockup')">UI Design</button>
+          </div>
+        </div>
+        <div class="controls-row">
+          <input id="max_steps" type="number" min="1" max="20" value="6" />
+          <select id="mode_select" style="padding:8px; border-radius:6px; background:#071627; color:inherit">
+            <option value="auto">Auto mode</option>
+            <option value="confirm">Confirm mode</option>
+          </select>
+          <select id="model_select" style="padding:8px; border-radius:6px; background:#071627; color:inherit">
+            <option value="random">Random model</option>
+            <option value="gpt-4o">gpt-4o</option>
+            <option value="gpt-4o-mini">gpt-4o-mini</option>
+            <option value="gpt-4-turbo">gpt-4-turbo</option>
+            <option value="gpt-4">gpt-4</option>
+            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+          </select>
+          <button id="runBtn">Start run</button>
+          <button id="undoBtn" style="background:#f39c12">Undo Last</button>
+          <button id="clearBtn" style="background:#3b3f44">Clear</button>
+        </div>
+        <div class="muted small">Status: <span id="status">idle</span></div>
+      </div>
+      
+      <!-- Status indicator -->
+      <div id="statusIndicator" class="muted small" style="padding:8px; border-radius:6px; background:#071023; margin-top:8px; display:none;">
+        <span id="statusIcon">ℹ️</span> <span id="statusMessage">Ready</span>
+      </div>
+      
+      <!-- Confirmation panel (hidden by default) -->
+      <div id="confirmPanel" class="controls" style="display:none; margin-top:12px; border:1px solid rgba(57,160,255,0.3); border-radius:6px; padding:12px;">
+        <div><strong>Plan Review</strong></div>
+        <div id="planDisplay" class="muted small" style="margin:8px 0;"></div>
+        <div class="controls-row" style="justify-content:flex-start; gap:8px;">
+          <button id="approveBtn" style="background:#2ecc71">Approve</button>
+          <button id="editBtn" style="background:#f39c12">Edit</button>
+          <button id="regenerateBtn" style="background:#9b59b6">Regenerate</button>
+          <button id="cancelBtn" style="background:#e74c3c">Cancel</button>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div><strong>Trace</strong></div>
+        <div id="trace" class="stream" style="height:220px"></div>
+      </div>
+    </div>
+
+    <div class="col center">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
+        <div><strong>Live stream</strong></div>
+        <div class="muted small">Auto-updates below</div>
+      </div>
+      <div id="progressContainer" style="display:none; margin-bottom:12px;">
+        <div class="muted small" id="progressText">Initializing...</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+      </div>
+      <div id="stream" class="stream"></div>
+    </div>
+
+    <div class="col right">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
+        <div><strong>Preview</strong></div>
+        <div class="muted small">Renders generated pages when available</div>
+      </div>
+      <iframe id="preview" class="preview hidden" src="about:blank"></iframe>
+      <div id="preview-empty" class="muted small" style="margin-top:8px">No preview yet — run a task that produces a preview (e.g. landing page).</div>
+    </div>
+  </div>
+
+<script>
+const streamEl = document.getElementById('stream');
+const traceEl = document.getElementById('trace');
+const previewEl = document.getElementById('preview');
+const statusIndicator = document.getElementById('statusIndicator');
+const statusIcon = document.getElementById('statusIcon');
+const statusMessage = document.getElementById('statusMessage');
+
+// Theme toggle functionality
+const themeToggle = document.getElementById('themeToggle');
+let currentTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', currentTheme);
+themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+
+themeToggle.addEventListener('click', () => {
+  currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', currentTheme);
+  themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('theme', currentTheme);
+});
+
+// Example goal setter
+function setGoal(goal) {
+  document.getElementById('goal').value = goal;
+}
+
+const es = new EventSource('/stream');
+es.onmessage = (ev) => {
+  try {
+    const obj = JSON.parse(ev.data);
+    const item = document.createElement('div');
+    item.className = 'event';
+
+    // badge by type
+    const badge = document.createElement('span');
+    const t = (obj.type || 'event');
+    badge.className = 'badge ' + (t.split('.')[0] || '');
+    badge.textContent = t;
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = new Date().toLocaleTimeString();
+
+    const body = document.createElement('div');
+    body.textContent = obj.text || JSON.stringify(obj);
+
+    item.appendChild(badge);
+    item.appendChild(meta);
+    item.appendChild(body);
+
+    streamEl.appendChild(item);
+    streamEl.scrollTop = streamEl.scrollHeight;
+
+    // update trace list if present
+    if (obj.trace) {
+      const tdiv = document.createElement('div');
+      tdiv.textContent = JSON.stringify(obj.trace);
+      traceEl.appendChild(tdiv);
+      traceEl.scrollTop = traceEl.scrollHeight;
+    }
+
+    // progress handling
+    if (obj.type === 'run.start') {
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      progressContainer.style.display = 'block';
+      progressFill.style.width = '0%';
+      progressText.textContent = 'Initializing...';
+    }
+    
+    if (obj.type === 'progress') {
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      progressFill.style.width = obj.progress + '%';
+      progressText.textContent = obj.text;
+    }
+    
+    if (obj.type === 'run.complete' || obj.type === 'run.error' || obj.type === 'run.cancelled') {
+      const progressContainer = document.getElementById('progressContainer');
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      progressFill.style.width = '100%';
+      progressText.textContent = obj.type === 'run.complete' ? 'Complete!' : 'Finished';
+      setTimeout(() => {
+        progressContainer.style.display = 'none';
+      }, 3000);
+    }
+    
+    // hide confirmation panel when plan is approved or run completes/errors
+    if (obj.type === 'plan.approved' || obj.type === 'run.complete' || obj.type === 'run.error' || obj.type === 'run.cancelled') {
+      document.getElementById('confirmPanel').style.display = 'none';
+    }
+
+    // status updates
+    if (obj.type === 'run.start') {
+      updateStatus('🚀', 'Starting agent run...');
+    } else if (obj.type === 'plan') {
+      updateStatus('📋', 'Plan generated, processing tasks...');
+    } else if (obj.type === 'task.start') {
+      updateStatus('⚡', `Executing: ${obj.task?.title || 'task'}`);
+    } else if (obj.type === 'task.result') {
+      updateStatus('✅', 'Task completed');
+    } else if (obj.type === 'run.complete') {
+      updateStatus('🎉', 'Run completed successfully!', true);
+      setTimeout(() => updateStatus('', '', false), 5000);
+    } else if (obj.type === 'run.error') {
+      updateStatus('❌', 'Run failed - check logs', true);
+    } else if (obj.type === 'run.cancelled') {
+      updateStatus('🛑', 'Run cancelled', true);
+      setTimeout(() => updateStatus('', '', false), 3000);
+    }
+  } catch (e) {
+    console.error('bad event', e);
+  }
+};
+
+es.onerror = (e) => {
+  console.error('stream error', e);
+};
+
+// run form handling
+const runBtn = document.getElementById('runBtn');
+const goalEl = document.getElementById('goal');
+const maxStepsEl = document.getElementById('max_steps');
+let runActive = false;
+runBtn.addEventListener('click', async () => {
+  if (runActive) return;
+  const goal = goalEl.value.trim();
+  const max_steps = parseInt(maxStepsEl.value, 10) || 6;
+  if (!goal) {
+    alert('Please enter a goal');
+    return;
+  }
+  runActive = true;
+  runBtn.disabled = true;
+  runBtn.textContent = 'Running...';
+  document.getElementById('status').textContent = 'running';
+  updateStatus('⏳', 'Initializing...');
+
+  // post to /run
+  try {
+    const selectedModel = document.getElementById('model_select').value;
+    const selectedMode = document.getElementById('mode_select').value;
+    const model = selectedModel === 'random' ? null : selectedModel;
+    const res = await fetch('/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal, max_steps, model, mode: selectedMode })
+    });
+    const body = await res.json();
+    const itm = document.createElement('div');
+    itm.className = 'event';
+  itm.innerHTML = '<div class="meta">ui — ' + (new Date()).toLocaleTimeString() + '</div><div>' + (body.message || JSON.stringify(body)) + '</div>';
+    streamEl.appendChild(itm);
+    streamEl.scrollTop = streamEl.scrollHeight;
+  } catch (e) {
+    console.error('run post error', e);
+    const itm = document.createElement('div');
+    itm.className = 'event';
+    itm.innerHTML = '<div class="meta">ui-error — ' + (new Date()).toLocaleTimeString() + '</div><div>' + e.toString() + '</div>';
+    streamEl.appendChild(itm);
+  }
+  
+});
+
+// confirmation button handlers
+const approveBtn = document.getElementById('approveBtn');
+const editBtn = document.getElementById('editBtn');
+const regenerateBtn = document.getElementById('regenerateBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+
+async function sendConfirmation(action, data = {}) {
+  try {
+    const res = await fetch('/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, ...data })
+    });
+    const body = await res.json();
+    console.log('Confirmation sent:', body);
+  } catch (e) {
+    console.error('Confirmation error:', e);
+  }
+}
+
+approveBtn.addEventListener('click', () => sendConfirmation('approve'));
+editBtn.addEventListener('click', () => sendConfirmation('edit'));
+regenerateBtn.addEventListener('click', () => sendConfirmation('regenerate'));
+cancelBtn.addEventListener('click', () => sendConfirmation('cancel'));
+
+// undo button
+const undoBtn = document.getElementById('undoBtn');
+undoBtn.addEventListener('click', async () => {
+  try {
+    const res = await fetch('/undo', { method: 'POST' });
+    const body = await res.json();
+    if (body.ok) {
+      const itm = document.createElement('div');
+      itm.className = 'event';
+      itm.innerHTML = '<div class="meta">ui — ' + (new Date()).toLocaleTimeString() + '</div><div>✅ ' + (body.undid_task || 'Task undone') + '</div>';
+      streamEl.appendChild(itm);
+      streamEl.scrollTop = streamEl.scrollHeight;
+    } else {
+      alert('Undo failed: ' + (body.error || 'Unknown error'));
+    }
+  } catch (e) {
+    console.error('Undo error:', e);
+    alert('Undo failed: ' + e.message);
+  }
+});
+</script>
+</body>
+</html>
