@@ -74,19 +74,25 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-You can download and view the demo videos from the repository:
+### Web UI - Confirm Mode
+User approval workflow demonstration:
 
-| Demo | Download | Size |
-|------|----------|------|
-| 🌐 **Web UI - Confirm Mode** | [demo_webUI_confirm_mode_fast.mp4](./demo_webUI_confirm_mode_fast.mp4) | 1.7 MB |
-| 🌐 **Web UI - Auto Mode** | [demo_webUI_auto_mode_fast.mp4](./demo_webUI_auto_mode_fast.mp4) | 640 KB |
-| 💻 **CLI - Confirm Mode** | [demo_cli_confirm_mode_fast.mp4](./demo_cli_confirm_mode_fast.mp4) | 1.4 MB |
-| 💻 **CLI - Auto Mode** | [demo_cli_auto_mode_fast.mp4](./demo_cli_auto_mode_fast.mp4) | 1.7 MB |
+https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_webUI_confirm_mode_fast.mp4
 
-**To view videos on GitHub:**
-1. Click on any demo link above
-2. GitHub will display the video player in the file viewer
-3. Or download and play locally with your favorite video player
+### Web UI - Auto Mode
+Automatic execution mode demonstration:
+
+https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_webUI_auto_mode_fast.mp4
+
+### CLI - Confirm Mode
+Command-line interface with approval workflow:
+
+https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_cli_confirm_mode_fast.mp4
+
+### CLI - Auto Mode
+Command-line interface automatic mode:
+
+https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_cli_auto_mode_fast.mp4
 
 ## 🎮 Usage
 
