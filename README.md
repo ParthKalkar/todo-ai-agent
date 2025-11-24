@@ -74,29 +74,19 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-> **Note:** GitHub now supports video playback directly in README files. If videos don't load, refresh the page or view the raw markdown.
+You can download and view the demo videos from the repository:
 
-### Web UI - Confirm Mode
-Watch the web interface with user approval workflow:
+| Demo | Download | Size |
+|------|----------|------|
+| 🌐 **Web UI - Confirm Mode** | [demo_webUI_confirm_mode_fast.mp4](./demo_webUI_confirm_mode_fast.mp4) | 1.7 MB |
+| 🌐 **Web UI - Auto Mode** | [demo_webUI_auto_mode_fast.mp4](./demo_webUI_auto_mode_fast.mp4) | 640 KB |
+| 💻 **CLI - Confirm Mode** | [demo_cli_confirm_mode_fast.mp4](./demo_cli_confirm_mode_fast.mp4) | 1.4 MB |
+| 💻 **CLI - Auto Mode** | [demo_cli_auto_mode_fast.mp4](./demo_cli_auto_mode_fast.mp4) | 1.7 MB |
 
-https://github.com/user-attachments/assets/demo_webUI_confirm_mode_fast.mp4
-
-### Web UI - Auto Mode  
-Watch the web interface in automatic execution mode:
-
-https://github.com/user-attachments/assets/demo_webUI_auto_mode_fast.mp4
-
-### CLI - Confirm Mode
-Watch the command-line interface with approval workflow:
-
-https://github.com/user-attachments/assets/demo_cli_confirm_mode_fast.mp4
-
-### CLI - Auto Mode
-Watch the command-line interface in automatic mode:
-
-https://github.com/user-attachments/assets/demo_cli_auto_mode_fast.mp4
-
-*All videos are optimized and lightweight (640KB - 1.7MB each)*
+**To view videos on GitHub:**
+1. Click on any demo link above
+2. GitHub will display the video player in the file viewer
+3. Or download and play locally with your favorite video player
 
 ## 🎮 Usage
 
