@@ -77,22 +77,22 @@ http://127.0.0.1:8000
 ### Web UI - Confirm Mode
 User approval workflow demonstration:
 
-https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_webUI_confirm_mode_fast.mp4
+[demo_webUI_confirm_mode_fast.mp4](./demo_webUI_confirm_mode_fast.mp4)
 
 ### Web UI - Auto Mode
 Automatic execution mode demonstration:
 
-https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_webUI_auto_mode_fast.mp4
+[demo_webUI_auto_mode_fast.mp4](./demo_webUI_auto_mode_fast.mp4)
 
 ### CLI - Confirm Mode
 Command-line interface with approval workflow:
 
-https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_cli_confirm_mode_fast.mp4
+[demo_cli_confirm_mode_fast.mp4](./demo_cli_confirm_mode_fast.mp4)
 
 ### CLI - Auto Mode
 Command-line interface automatic mode:
 
-https://github.com/ParthKalkar/todo-ai-agent/assets/videos/demo_cli_auto_mode_fast.mp4
+[demo_cli_auto_mode_fast.mp4](./demo_cli_auto_mode_fast.mp4)
 
 ## 🎮 Usage
 
