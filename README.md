@@ -75,16 +75,16 @@ http://127.0.0.1:8000
 ## 🎬 Demo Videos
 
 **Web UI - Confirm Mode** (user approval workflow)
-https://github.com/ParthKalkar/todo-ai-agent/assets/demo_webUI_confirm_mode_fast.mp4
+https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_confirm_mode_fast.mp4
 
 **Web UI - Auto Mode** (instant execution)
-https://github.com/ParthKalkar/todo-ai-agent/assets/demo_webUI_auto_mode_fast.mp4
+https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_auto_mode_fast.mp4
 
 **CLI - Confirm Mode** (command-line with approval)
-https://github.com/ParthKalkar/todo-ai-agent/assets/demo_cli_confirm_mode_fast.mp4
+https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_confirm_mode_fast.mp4
 
 **CLI - Auto Mode** (command-line automatic)
-https://github.com/ParthKalkar/todo-ai-agent/assets/demo_cli_auto_mode_fast.mp4
+https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_auto_mode_fast.mp4
 
 *All videos are optimized and lightweight (640KB - 1.7MB each)*
 
