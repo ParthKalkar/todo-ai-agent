@@ -74,19 +74,20 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-**Web UI - Confirm Mode** (user approval workflow)
-https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_confirm_mode_fast.mp4
+Click on any demo below to download and watch:
 
-**Web UI - Auto Mode** (instant execution)
-https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_auto_mode_fast.mp4
+| Mode | Web UI | CLI |
+|------|--------|-----|
+| **Confirm Mode** <br/> (user approval) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_confirm_mode_fast.mp4) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_confirm_mode_fast.mp4) |
+| **Auto Mode** <br/> (instant execution) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_auto_mode_fast.mp4) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_auto_mode_fast.mp4) |
 
-**CLI - Confirm Mode** (command-line with approval)
-https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_confirm_mode_fast.mp4
+**Video Details:**
+- Web UI Confirm Mode: 1.7 MB
+- Web UI Auto Mode: 640 KB
+- CLI Confirm Mode: 1.4 MB
+- CLI Auto Mode: 1.7 MB
 
-**CLI - Auto Mode** (command-line automatic)
-https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_auto_mode_fast.mp4
-
-*All videos are optimized and lightweight (640KB - 1.7MB each)*
+*All videos are optimized and lightweight for quick download*
 
 ## 🎮 Usage
 
