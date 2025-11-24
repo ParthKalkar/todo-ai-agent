@@ -74,25 +74,14 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-### Web UI - Confirm Mode
-User approval workflow demonstration:
+| Demo | Link | Size |
+|------|------|------|
+| 🌐 **Web UI - Confirm Mode** | [demo_webUI_confirm_mode_fast.mp4](./demo_webUI_confirm_mode_fast.mp4) | 1.7 MB |
+| 🌐 **Web UI - Auto Mode** | [demo_webUI_auto_mode_fast.mp4](./demo_webUI_auto_mode_fast.mp4) | 640 KB |
+| 💻 **CLI - Confirm Mode** | [demo_cli_confirm_mode_fast.mp4](./demo_cli_confirm_mode_fast.mp4) | 1.4 MB |
+| 💻 **CLI - Auto Mode** | [demo_cli_auto_mode_fast.mp4](./demo_cli_auto_mode_fast.mp4) | 1.7 MB |
 
-[demo_webUI_confirm_mode_fast.mp4](./demo_webUI_confirm_mode_fast.mp4)
-
-### Web UI - Auto Mode
-Automatic execution mode demonstration:
-
-[demo_webUI_auto_mode_fast.mp4](./demo_webUI_auto_mode_fast.mp4)
-
-### CLI - Confirm Mode
-Command-line interface with approval workflow:
-
-[demo_cli_confirm_mode_fast.mp4](./demo_cli_confirm_mode_fast.mp4)
-
-### CLI - Auto Mode
-Command-line interface automatic mode:
-
-[demo_cli_auto_mode_fast.mp4](./demo_cli_auto_mode_fast.mp4)
+Click any link to watch the demo video in GitHub's native player.
 
 ## 🎮 Usage
 
