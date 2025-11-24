@@ -74,20 +74,29 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-Click on any demo below to download and watch:
+> **Note:** GitHub now supports video playback directly in README files. If videos don't load, refresh the page or view the raw markdown.
 
-| Mode | Web UI | CLI |
-|------|--------|-----|
-| **Confirm Mode** <br/> (user approval) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_confirm_mode_fast.mp4) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_confirm_mode_fast.mp4) |
-| **Auto Mode** <br/> (instant execution) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_webUI_auto_mode_fast.mp4) | [📹 Download Demo](https://github.com/ParthKalkar/todo-ai-agent/raw/main/demo_cli_auto_mode_fast.mp4) |
+### Web UI - Confirm Mode
+Watch the web interface with user approval workflow:
 
-**Video Details:**
-- Web UI Confirm Mode: 1.7 MB
-- Web UI Auto Mode: 640 KB
-- CLI Confirm Mode: 1.4 MB
-- CLI Auto Mode: 1.7 MB
+https://github.com/user-attachments/assets/demo_webUI_confirm_mode_fast.mp4
 
-*All videos are optimized and lightweight for quick download*
+### Web UI - Auto Mode  
+Watch the web interface in automatic execution mode:
+
+https://github.com/user-attachments/assets/demo_webUI_auto_mode_fast.mp4
+
+### CLI - Confirm Mode
+Watch the command-line interface with approval workflow:
+
+https://github.com/user-attachments/assets/demo_cli_confirm_mode_fast.mp4
+
+### CLI - Auto Mode
+Watch the command-line interface in automatic mode:
+
+https://github.com/user-attachments/assets/demo_cli_auto_mode_fast.mp4
+
+*All videos are optimized and lightweight (640KB - 1.7MB each)*
 
 ## 🎮 Usage
 
