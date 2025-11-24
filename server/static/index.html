@@ -37,9 +37,10 @@
     header .title { font-weight:600 }
     .wrap { display:flex; gap:12px; height:calc(100vh - 64px); padding:16px }
     .col { background:var(--panel); border-radius:10px; padding:12px; box-sizing:border-box }
-    .left { width:360px; display:flex; flex-direction:column; gap:12px }
-    .center { flex:1; display:flex; flex-direction:column }
-    .right { width:520px; display:flex; flex-direction:column }
+    .left { width:320px; display:flex; flex-direction:column; gap:12px }
+    .center { flex:1; display:flex; flex-direction:column; min-width:300px }
+    .right { width:480px; display:flex; flex-direction:column }
+    .far-right { width:480px; display:flex; flex-direction:column }
     .controls { display:flex; flex-direction:column; gap:8px }
     textarea, input[type=number] { width:100%; padding:8px; border-radius:6px; border:1px solid rgba(255,255,255,0.06); background:#071627; color:inherit }
     button { background:var(--accent); color:white; border:0; padding:8px 12px; border-radius:6px; cursor:pointer }
@@ -71,6 +72,84 @@
     .example-btn:hover {
       background: rgba(57,160,255,0.2);
       border-color: var(--accent);
+    }
+    .controls-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .task-card {
+      background: linear-gradient(135deg, rgba(57,160,255,0.05), rgba(46,204,113,0.05));
+      border: 1px solid rgba(57,160,255,0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+    }
+    .task-card:hover {
+      border-color: rgba(57,160,255,0.4);
+      box-shadow: 0 4px 12px rgba(57,160,255,0.1);
+    }
+    .task-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .task-id {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(57,160,255,0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      min-width: 40px;
+      text-align: center;
+    }
+    .task-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+    .task-status {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .task-status.pending {
+      background: rgba(255,195,0,0.15);
+      color: #ffd166;
+    }
+    .task-status.in-progress {
+      background: rgba(57,160,255,0.15);
+      color: var(--accent);
+    }
+    .task-status.completed {
+      background: rgba(46,204,113,0.15);
+      color: var(--success);
+    }
+    .task-status.failed {
+      background: rgba(255,107,107,0.15);
+      color: var(--danger);
+    }
+    .task-description {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+      padding: 8px 0;
+    }
+    .task-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.05);
     }
   </style>
 </head>
@@ -121,11 +200,12 @@
           </select>
           <select id="model_select" style="padding:8px; border-radius:6px; background:#071627; color:inherit">
             <option value="random">Random model</option>
+            <option value="gpt-5.1">gpt-5.1 ⭐ Latest</option>
+            <option value="gpt-5-mini">gpt-5-mini</option>
             <option value="gpt-4o">gpt-4o</option>
-            <option value="gpt-4o-mini">gpt-4o-mini</option>
-            <option value="gpt-4-turbo">gpt-4-turbo</option>
-            <option value="gpt-4">gpt-4</option>
-            <option value="gpt-3.5-turbo">gpt-3.5-turbo</option>
+            <option value="gpt-4.1">gpt-4.1</option>
+            <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+            <option value="gpt-4.1-nano">gpt-4.1-nano</option>
           </select>
           <button id="runBtn">Start run</button>
           <button id="undoBtn" style="background:#f39c12">Undo Last</button>
@@ -150,10 +230,6 @@
           <button id="cancelBtn" style="background:#e74c3c">Cancel</button>
         </div>
       </div>
-      <div style="margin-top:12px">
-        <div><strong>Trace</strong></div>
-        <div id="trace" class="stream" style="height:220px"></div>
-      </div>
     </div>
 
     <div class="col center">
@@ -172,18 +248,27 @@
 
     <div class="col right">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
-        <div><strong>Preview</strong></div>
-        <div class="muted small">Renders generated pages when available</div>
+        <div><strong>Trace</strong></div>
+        <div class="muted small">Execution steps</div>
       </div>
-      <iframe id="preview" class="preview hidden" src="about:blank"></iframe>
-      <div id="preview-empty" class="muted small" style="margin-top:8px">No preview yet — run a task that produces a preview (e.g. landing page).</div>
+      <div id="trace" class="stream"></div>
+      <div id="trace-empty" class="muted small" style="margin-top:8px">Execution trace will appear here...</div>
+    </div>
+    
+    <div class="col far-right">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px">
+        <div><strong>Rendered Output</strong></div>
+        <div class="muted small">Live HTML rendering</div>
+      </div>
+      <iframe id="rendered-output" class="preview hidden" src="about:blank" style="flex:1;"></iframe>
+      <div id="rendered-empty" class="muted small" style="margin-top:8px">HTML output will appear here...</div>
     </div>
   </div>
 
 <script>
 const streamEl = document.getElementById('stream');
 const traceEl = document.getElementById('trace');
-const previewEl = document.getElementById('preview');
+const renderedOutputEl = document.getElementById('rendered-output');
 const statusIndicator = document.getElementById('statusIndicator');
 const statusIcon = document.getElementById('statusIcon');
 const statusMessage = document.getElementById('statusMessage');
@@ -200,6 +285,10 @@ themeToggle.addEventListener('click', () => {
   themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
   localStorage.setItem('theme', currentTheme);
 });
+
+// Tracking for confirmation flow
+let currentRunId = null;
+let pendingConfirmation = false;
 
 // Example goal setter
 function setGoal(goal) {
@@ -235,10 +324,87 @@ es.onmessage = (ev) => {
 
     // update trace list if present
     if (obj.trace) {
+      const traceEmptyEl = document.getElementById('trace-empty');
+      if (traceEmptyEl) traceEmptyEl.style.display = 'none';
       const tdiv = document.createElement('div');
-      tdiv.textContent = JSON.stringify(obj.trace);
+      
+      // Check if trace is a task object
+      if (obj.trace.task_id !== undefined || obj.trace.title !== undefined) {
+        tdiv.className = 'task-card';
+        const task = obj.trace;
+        
+        // Header with ID, title, and status
+        const header = document.createElement('div');
+        header.className = 'task-header';
+        
+        const idBadge = document.createElement('div');
+        idBadge.className = 'task-id';
+        idBadge.textContent = `#${task.task_id || '?'}`;
+        
+        const title = document.createElement('div');
+        title.className = 'task-title';
+        title.textContent = task.title || 'Untitled';
+        
+        const statusBadge = document.createElement('div');
+        statusBadge.className = `task-status ${(task.status || 'pending').toLowerCase()}`;
+        statusBadge.textContent = task.status || 'pending';
+        
+        header.appendChild(idBadge);
+        header.appendChild(title);
+        header.appendChild(statusBadge);
+        tdiv.appendChild(header);
+        
+        // Description
+        if (task.description) {
+          const desc = document.createElement('div');
+          desc.className = 'task-description';
+          desc.textContent = task.description;
+          tdiv.appendChild(desc);
+        }
+        
+        // Meta info
+        if (task.created_at || task.updated_at) {
+          const meta = document.createElement('div');
+          meta.className = 'task-meta';
+          if (task.created_at) {
+            const created = document.createElement('span');
+            created.textContent = `Created: ${new Date(task.created_at).toLocaleTimeString()}`;
+            meta.appendChild(created);
+          }
+          if (task.updated_at) {
+            const updated = document.createElement('span');
+            updated.textContent = `Updated: ${new Date(task.updated_at).toLocaleTimeString()}`;
+            meta.appendChild(updated);
+          }
+          tdiv.appendChild(meta);
+        }
+      } else {
+        // Fallback for non-task traces
+        tdiv.textContent = JSON.stringify(obj.trace);
+      }
+      
       traceEl.appendChild(tdiv);
       traceEl.scrollTop = traceEl.scrollHeight;
+    }
+
+    // handle rendered output (HTML preview)
+    if (obj.html || obj.preview_url) {
+      const renderedOutputEl = document.getElementById('rendered-output');
+      const renderedEmptyEl = document.getElementById('rendered-empty');
+      if (renderedOutputEl && renderedEmptyEl) {
+        if (obj.html) {
+          // If we have inline HTML, use data URL
+          const htmlContent = obj.html;
+          const blob = new Blob([htmlContent], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          renderedOutputEl.src = url;
+        } else if (obj.preview_url) {
+          // Otherwise use the preview URL
+          renderedOutputEl.src = obj.preview_url;
+        }
+        renderedOutputEl.style.display = 'block';
+        renderedEmptyEl.style.display = 'none';
+      }
     }
 
     // progress handling
@@ -269,6 +435,33 @@ es.onmessage = (ev) => {
       }, 3000);
     }
     
+    // Handle plan confirmation display
+    if (obj.type === 'plan.confirm') {
+      const confirmPanel = document.getElementById('confirmPanel');
+      const planDisplay = document.getElementById('planDisplay');
+      if (confirmPanel && planDisplay && obj.plan) {
+        // Format the plan as a readable list
+        let planHtml = '<div style="font-family: monospace; white-space: pre-wrap; max-height: 200px; overflow-y: auto;">';
+        if (Array.isArray(obj.plan)) {
+          obj.plan.forEach((task, idx) => {
+            const title = task.title || task.id || `Task ${idx + 1}`;
+            const desc = task.description ? ` - ${task.description}` : '';
+            planHtml += `${idx + 1}. ${title}${desc}\n`;
+          });
+        } else {
+          planHtml += JSON.stringify(obj.plan, null, 2).substring(0, 500);
+        }
+        planHtml += '</div>';
+        planDisplay.innerHTML = planHtml;
+        confirmPanel.style.display = 'block';
+        updateStatus('🔍', 'Awaiting plan approval...');
+      }
+    }
+    
+    if (obj.type === 'plan.approved') {
+      updateStatus('✅', 'Plan approved, executing...');
+    }
+    
     // hide confirmation panel when plan is approved or run completes/errors
     if (obj.type === 'plan.approved' || obj.type === 'run.complete' || obj.type === 'run.error' || obj.type === 'run.cancelled') {
       document.getElementById('confirmPanel').style.display = 'none';
@@ -286,11 +479,26 @@ es.onmessage = (ev) => {
     } else if (obj.type === 'run.complete') {
       updateStatus('🎉', 'Run completed successfully!', true);
       setTimeout(() => updateStatus('', '', false), 5000);
+      // Reset button state
+      runActive = false;
+      runBtn.disabled = false;
+      runBtn.textContent = 'Start run';
+      document.getElementById('status').textContent = 'idle';
     } else if (obj.type === 'run.error') {
       updateStatus('❌', 'Run failed - check logs', true);
+      // Reset button state on error
+      runActive = false;
+      runBtn.disabled = false;
+      runBtn.textContent = 'Start run';
+      document.getElementById('status').textContent = 'error';
     } else if (obj.type === 'run.cancelled') {
       updateStatus('🛑', 'Run cancelled', true);
       setTimeout(() => updateStatus('', '', false), 3000);
+      // Reset button state on cancel
+      runActive = false;
+      runBtn.disabled = false;
+      runBtn.textContent = 'Start run';
+      document.getElementById('status').textContent = 'idle';
     }
   } catch (e) {
     console.error('bad event', e);
@@ -301,16 +509,39 @@ es.onerror = (e) => {
   console.error('stream error', e);
 };
 
+// Status update helper
+function updateStatus(icon, message, persist = false) {
+  const statusIndicator = document.getElementById('statusIndicator');
+  const statusIcon = document.getElementById('statusIcon');
+  const statusMessage = document.getElementById('statusMessage');
+  
+  if (!statusIndicator) return;
+  
+  if (icon || message) {
+    statusIcon.textContent = icon;
+    statusMessage.textContent = message;
+    statusIndicator.style.display = 'block';
+  } else {
+    statusIndicator.style.display = 'none';
+  }
+}
+
 // run form handling
 const runBtn = document.getElementById('runBtn');
 const goalEl = document.getElementById('goal');
 const maxStepsEl = document.getElementById('max_steps');
 let runActive = false;
 runBtn.addEventListener('click', async () => {
-  if (runActive) return;
+  console.log('[DEBUG] Run button clicked');
+  if (runActive) {
+    console.log('[DEBUG] Run already active, returning');
+    return;
+  }
   const goal = goalEl.value.trim();
   const max_steps = parseInt(maxStepsEl.value, 10) || 6;
+  console.log('[DEBUG] Goal:', goal, 'Max steps:', max_steps);
   if (!goal) {
+    console.log('[DEBUG] No goal entered, showing alert');
     alert('Please enter a goal');
     return;
   }
@@ -321,16 +552,24 @@ runBtn.addEventListener('click', async () => {
   updateStatus('⏳', 'Initializing...');
 
   // post to /run
+  console.log('[DEBUG] About to fetch /run');
   try {
     const selectedModel = document.getElementById('model_select').value;
     const selectedMode = document.getElementById('mode_select').value;
     const model = selectedModel === 'random' ? null : selectedModel;
+    console.log('[DEBUG] Selected model:', selectedModel, 'Selected mode:', selectedMode, 'Final model:', model);
     const res = await fetch('/run', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ goal, max_steps, model, mode: selectedMode })
     });
+    console.log('[DEBUG] Fetch response status:', res.status);
     const body = await res.json();
+    console.log('[DEBUG] Response body:', body);
+    // Capture run ID for confirmation actions
+    if (body.run_id) {
+      currentRunId = body.run_id;
+    }
     const itm = document.createElement('div');
     itm.className = 'event';
   itm.innerHTML = '<div class="meta">ui — ' + (new Date()).toLocaleTimeString() + '</div><div>' + (body.message || JSON.stringify(body)) + '</div>';
@@ -391,6 +630,58 @@ undoBtn.addEventListener('click', async () => {
     alert('Undo failed: ' + e.message);
   }
 });
+
+// clear button
+const clearBtn = document.getElementById('clearBtn');
+clearBtn.addEventListener('click', () => {
+  if (confirm('Clear all streams and reset UI?')) {
+    streamEl.innerHTML = '';
+    traceEl.innerHTML = '';
+    document.getElementById('trace-empty').style.display = 'block';
+    document.getElementById('rendered-empty').style.display = 'block';
+    renderedOutputEl.src = 'about:blank';
+    document.getElementById('progressContainer').style.display = 'none';
+    document.getElementById('confirmPanel').style.display = 'none';
+    goalEl.value = '';
+    document.getElementById('status').textContent = 'idle';
+    updateStatus('', '', false);
+  }
+});
+
+// Keyboard shortcuts fallback for screen recording - when mouse clicks fail
+document.addEventListener('keydown', (e) => {
+  // Space = Start run
+  if (e.key === ' ' && runBtn) {
+    e.preventDefault();
+    console.log('[keyboard] Space pressed - triggering run');
+    runBtn.click();
+  }
+  // 'A' = Approve (when confirmation panel visible)
+  else if (e.key.toLowerCase() === 'a' && approveBtn && approveBtn.offsetParent !== null) {
+    e.preventDefault();
+    console.log('[keyboard] A pressed - triggering approve');
+    approveBtn.click();
+  }
+  // 'E' = Edit (when confirmation panel visible)
+  else if (e.key.toLowerCase() === 'e' && editBtn && editBtn.offsetParent !== null) {
+    e.preventDefault();
+    console.log('[keyboard] E pressed - triggering edit');
+    editBtn.click();
+  }
+  // 'R' = Regenerate (when confirmation panel visible)
+  else if (e.key.toLowerCase() === 'r' && regenerateBtn && regenerateBtn.offsetParent !== null) {
+    e.preventDefault();
+    console.log('[keyboard] R pressed - triggering regenerate');
+    regenerateBtn.click();
+  }
+  // 'C' = Cancel (when confirmation panel visible)
+  else if (e.key.toLowerCase() === 'c' && cancelBtn && cancelBtn.offsetParent !== null) {
+    e.preventDefault();
+    console.log('[keyboard] C pressed - triggering cancel');
+    cancelBtn.click();
+  }
+});
+
 </script>
 </body>
 </html>

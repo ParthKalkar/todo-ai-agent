@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import os
 import sys
 import json
@@ -54,7 +55,7 @@ def do_edit(tasks: List[Dict]):
     print('Task updated.')
 
 
-def run_execution_loop(tasks: List[Dict], persist: bool = True):
+async def run_execution_loop(tasks: List[Dict], persist: bool = True):
     trace = []
     # Ensure tasks are dicts
     for t in tasks:
@@ -74,7 +75,7 @@ def run_execution_loop(tasks: List[Dict], persist: bool = True):
             break
 
         print(f"\nSelected task #{next_task['id']}: {next_task['title']}")
-        result = execute_task(next_task)
+        result = await execute_task(next_task)
         trace_entry = {
             'task_id': next_task['id'],
             'title': next_task['title'],
@@ -178,7 +179,7 @@ def main(argv=None):
             choice = prompt_confirmation()
             if choice in ('approve', 'a'):
                 print('Approved — starting execution.')
-                run_execution_loop(tasks, persist=args.persist)
+                asyncio.run(run_execution_loop(tasks, persist=args.persist))
                 break
             elif choice == 'edit':
                 do_edit(tasks)
@@ -203,7 +204,7 @@ def main(argv=None):
         else:
             # auto
             print('Auto mode — starting execution immediately.')
-            run_execution_loop(tasks, persist=args.persist)
+            asyncio.run(run_execution_loop(tasks, persist=args.persist))
             break
 
 

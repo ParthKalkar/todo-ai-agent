@@ -255,8 +255,18 @@ MODELS = {
         "context_window": 128000,
         "cost_per_token": 0.00003
     },
-    "gpt-4o-mini": {
-        "name": "GPT-4o Mini",
+    "gpt-4.1": {
+        "name": "GPT-4.1",
+        "context_window": 128000,
+        "cost_per_token": 0.00003
+    },
+    "gpt-4.1-mini": {
+        "name": "GPT-4.1 Mini",
+        "context_window": 128000,
+        "cost_per_token": 0.0000015
+    },
+    "gpt-5-mini": {
+        "name": "GPT-5 Mini",
         "context_window": 128000,
         "cost_per_token": 0.0000015
     },
@@ -286,7 +296,7 @@ Detailed performance and usage analytics:
   "average_execution_time": 45.3,
   "model_usage": {
     "gpt-4o": 120,
-    "gpt-4o-mini": 30
+    "gpt-4.1-mini": 30
   },
   "error_breakdown": {
     "api_errors": 8,

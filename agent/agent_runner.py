@@ -58,7 +58,7 @@ def run_agent(goal: str, max_steps: int = 6, use_langchain: Optional[bool] = Non
     if models_env:
         models = [m.strip() for m in models_env.split(',') if m.strip()]
     else:
-        models = ["gpt-4", "gpt-3.5-turbo", "gpt-3.5-turbo-16k"]
+        models = ["gpt-4o", "gpt-4.1", "gpt-5-mini"]
     model_name = random.choice(models)
 
     # Build tools for LangChain

@@ -94,7 +94,7 @@ run_demo_scenarios() {
             "goal": "Create a Python script that calculates factorial of a number",
             "max_steps": 3,
             "mode": "auto",
-            "model": "gpt-4o-mini"
+            "model": "gpt-4.1-mini"
         }' > /dev/null
 
     print_success "Demo 1 completed"
@@ -110,7 +110,7 @@ run_demo_scenarios() {
             "goal": "Build a simple REST API for task management with FastAPI",
             "max_steps": 5,
             "mode": "confirm",
-            "model": "gpt-4o-mini"
+            "model": "gpt-4.1-mini"
         }' > /dev/null &
 
     RUN_PID=$!
@@ -141,7 +141,7 @@ run_demo_scenarios() {
             "goal": "",
             "max_steps": 1,
             "mode": "auto",
-            "model": "gpt-4o-mini"
+            "model": "gpt-4.1-mini"
         }' > /dev/null
 
     print_success "Error handling test completed"

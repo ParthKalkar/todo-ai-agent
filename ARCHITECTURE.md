@@ -1,5 +1,28 @@
 # 🚀 Production Architecture & Scalability Roadmap
 
+## Execution Modes
+
+### Auto Mode
+User goal → Planner generates plan → Executor runs all tasks → Results displayed
+
+**Use case**: Simple, well-defined tasks where user trusts the plan
+
+### Confirm Mode
+User goal → Planner generates plan → **User approves/rejects** → Executor runs tasks → Results displayed
+
+**Use case**: Complex tasks, important workflows, learning, experimenting
+
+**Implementation**:
+```
+1. Backend generates plan
+2. Broadcasts plan.confirm event to all connected clients
+3. Frontend shows confirmation panel with [Approve] [Edit] [Regenerate] [Cancel]
+4. User clicks button → Frontend sends POST /confirm with action
+5. Backend receives action, stores in confirmation_state dict
+6. Background execution detects action and proceeds accordingly
+7. Timeline: 5-minute timeout if no response
+```
+
 ## Current Architecture
 
 The system is built with a **modular, event-driven architecture** that supports both CLI and web interfaces:

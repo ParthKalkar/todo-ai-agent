@@ -1,4 +1,5 @@
 from typing import List, Dict
+from datetime import datetime
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
@@ -53,9 +54,21 @@ def show_tasks_ui(tasks: List[Dict], generating: bool = False):
 
 
 def generate_landing_preview(output_path: str, site_title: str = "Coupon Bazaar"):
-        """Create a simple static HTML preview for a landing page and write to output_path."""
+        """Create a simple static HTML preview for a landing page and write to output_path.
+        
+        Automatically adds timestamp to filename to keep multiple versions.
+        E.g., 'preview/landing.html' becomes 'preview/landing_20251124_143025.html'
+        """
         import os
 
+        # Add timestamp to filename before extension
+        base_path = output_path
+        if base_path.endswith('.html'):
+            base_path = base_path[:-5]  # Remove .html
+        
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = f"{base_path}_{timestamp}.html"
+        
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         html = f"""
         <!doctype html>

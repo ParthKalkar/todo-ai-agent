@@ -2,6 +2,8 @@ from dataclasses import dataclass, asdict
 from typing import List
 import os
 import random
+import json
+import re
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -45,13 +47,13 @@ def _generate_with_llm(goal: str) -> List[Task]:
         raise RuntimeError("OPENAI_API_KEY not set")
 
     # model selection: prefer explicit OPENAI_MODEL, else choose from OPENAI_MODELS or defaults
-    model_name = os.environ.get("OPENAI_MODEL", "gpt-3.5-turbo")
-    if model_name == "Random model":
+    model_name = os.environ.get("OPENAI_MODEL", "gpt-4o")
+    if model_name.lower() in ["random", "random model"]:
         models_env = os.environ.get("OPENAI_MODELS")
         if models_env:
             models = [m.strip() for m in models_env.split(',') if m.strip()]
         else:
-            models = ["gpt-4o-mini", "gpt-3.5-turbo"]
+            models = ["gpt-5.1", "gpt-4.1-mini", "gpt-5-mini"]
         model_name = random.choice(models)
 
     llm = ChatOpenAI(temperature=0, model_name=model_name)
@@ -86,8 +88,6 @@ def _generate_with_llm(goal: str) -> List[Task]:
         pass  # Cache not available
 
     # try to extract JSON from response
-    import json, re
-
     m = re.search(r"```json\s*(\[.*\])\s*```", resp, re.DOTALL)
     if not m:
         # fallback: try to find just the array

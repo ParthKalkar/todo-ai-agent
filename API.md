@@ -20,7 +20,7 @@ Execute an agent run with goal planning and task execution.
   "goal": "Build a REST API for user management",
   "max_steps": 10,
   "mode": "confirm",
-  "model": "gpt-4o-mini",
+  "model": "gpt-4.1-mini",
   "auto_confirm": false
 }
 ```
@@ -42,35 +42,63 @@ curl -X POST "http://localhost:8000/run" \
     "goal": "Create a Python script to analyze CSV data",
     "max_steps": 5,
     "mode": "auto",
-    "model": "gpt-4o-mini"
+    "model": "gpt-4.1-mini"
   }'
 ```
 
 ### POST `/confirm`
 
-Confirm or reject pending task execution in confirmation mode.
+Handle user confirmation for plan execution in confirm mode.
 
 **Request Body**:
 ```json
 {
   "action": "approve",
-  "task_id": "task-123",
-  "feedback": "Looks good, proceed"
+  "run_id": "5efec0be-1cde-4d93-afb3-1b8d112ecd69"
 }
 ```
 
 **Parameters**:
-- `action` (string, required): "approve" or "reject"
-- `task_id` (string, required): ID of the task to confirm
-- `feedback` (string, optional): Additional feedback or rejection reason
+- `action` (string, required): One of:
+  - `"approve"` - Execute the plan as proposed
+  - `"cancel"` - Abort the execution
+  - `"regenerate"` - Request a new plan (coming soon)
+  - `"edit"` - Edit the plan (coming soon)
+- `run_id` (string, optional): ID of the run to confirm. If omitted, uses most recent pending confirmation.
 
 **Response**:
 ```json
 {
-  "status": "confirmed",
-  "task_id": "task-123",
-  "message": "Task execution approved"
+  "ok": true,
+  "message": "Confirmation 'approve' received for run 5efec0be-1cde-4d93-afb3-1b8d112ecd69"
 }
+```
+
+**How it works in Confirm Mode**:
+1. User submits goal with `mode: "confirm"`
+2. Agent generates plan and broadcasts `plan.confirm` event
+3. Confirmation panel appears in UI with [Approve] [Edit] [Regenerate] [Cancel] buttons
+4. User clicks a button, which sends POST to `/confirm` with the action
+5. Backend receives action and stores it
+6. Background execution detects the action and proceeds accordingly
+
+**Example**:
+```bash
+# Approve the plan
+curl -X POST "http://localhost:8000/confirm" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "approve",
+    "run_id": "5efec0be-1cde-4d93-afb3-1b8d112ecd69"
+  }'
+
+# Cancel execution
+curl -X POST "http://localhost:8000/confirm" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "action": "cancel",
+    "run_id": "5efec0be-1cde-4d93-afb3-1b8d112ecd69"
+  }'
 ```
 
 ### POST `/undo`
@@ -139,7 +167,7 @@ Get comprehensive system metrics and performance data.
   },
   "model_usage": {
     "gpt-4o": 15,
-    "gpt-4o-mini": 10
+    "gpt-4.1-mini": 10
   },
   "error_breakdown": {
     "api_timeout": 1,
@@ -175,31 +203,60 @@ The `/run` endpoint returns a stream of Server-Sent Events. Each event contains 
 event: event_type
 data: {"key": "value", ...}
 
-// Example events
-event: planning_start
-data: {"message": "Starting goal analysis..."}
+// Core Events
+event: run.start
+data: {"text": "Starting run for goal: ...", "mode": "confirm", "model": "gpt-4.1-mini"}
 
-event: todo_generated
-data: {"todos": [...]}
+event: plan
+data: {"text": "Planner produced a plan.", "plan": [...]}
 
-event: task_start
-data: {"task_id": "task-1", "title": "Set up project structure"}
+// Confirm Mode Events
+event: plan.confirm
+data: {
+  "text": "Please review the plan and choose: approve, edit, regenerate, or cancel.",
+  "plan": [
+    {"id": 1, "title": "Task 1", "description": "..."},
+    {"id": 2, "title": "Task 2", "description": "..."}
+  ]
+}
+
+event: plan.approved
+data: {"text": "Plan approved. Starting execution."}
+
+// Task Events
+event: task.start
+data: {"text": "...", "task_id": "1", "title": "Design Landing Page Layout"}
+
+event: task.result
+data: {"text": "...", "task_id": "1", "result": "..."}
 
 event: progress
-data: {"task_id": "task-1", "progress": 50, "message": "Installing dependencies..."}
+data: {"text": "Processing task 1 of 5", "progress": 20, "current_task": "Task title"}
 
-event: task_complete
-data: {"task_id": "task-1", "status": "completed", "reflection": "..."}
+// Completion Events
+event: run.complete
+data: {"text": "Run completed successfully", "status": "completed"}
 
-event: confirmation_required
-data: {"task_id": "task-2", "title": "Implement authentication", "description": "..."}
+event: run.error
+data: {"text": "Error occurred during execution", "status": "failed"}
 
-event: run_complete
-data: {"status": "success", "total_tasks": 5, "completed_tasks": 5}
-
-event: error
-data: {"error": "API rate limit exceeded", "retry_after": 60}
+event: run.cancelled
+data: {"text": "Run cancelled by user", "status": "cancelled"}
 ```
+
+**Event Types Reference**:
+- `run.start` - Execution started with goal
+- `plan` - Task plan generated (for auto mode, no user confirmation needed)
+- `plan.confirm` - **Confirm mode only**: Plan ready for user approval
+- `plan.approved` - **Confirm mode only**: User approved the plan, execution starting
+- `plan.regenerating` - Plan regeneration requested (feature coming)
+- `task.start` - Individual task execution started
+- `task.result` - Task completed with result
+- `progress` - Progress update with completion percentage
+- `run.complete` - All tasks completed successfully
+- `run.error` - Error occurred during execution
+- `run.cancelled` - Run cancelled by user
+- `run.timeout` - Confirmation timeout (5 minutes in confirm mode)
 
 ## Event Types
 
@@ -272,7 +329,7 @@ class AgentClient:
         self.base_url = base_url
         self.client = httpx.AsyncClient()
 
-    async def run_agent(self, goal, mode="confirm", model="gpt-4o-mini"):
+    async def run_agent(self, goal, mode="confirm", model="gpt-4.1-mini"):
         """Run agent with streaming response"""
         payload = {
             "goal": goal,
@@ -325,7 +382,7 @@ class AgentAPI {
         const payload = {
             goal,
             mode: options.mode || 'confirm',
-            model: options.model || 'gpt-4o-mini',
+            model: options.model || 'gpt-4.1-mini',
             max_steps: options.maxSteps || 10
         };
 
