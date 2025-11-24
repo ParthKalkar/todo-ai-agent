@@ -24,6 +24,11 @@ node_modules/
 *.log
 server.log
 
+# Videos
+videos/
+*.mov
+*.avi
+
 # OS
 .DS_Store
 Thumbs.db
