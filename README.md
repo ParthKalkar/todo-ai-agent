@@ -72,6 +72,36 @@ python -m uvicorn server.app:app --host 127.0.0.1 --port 8000
 http://127.0.0.1:8000
 ```
 
+## 🎬 Demo Videos
+
+### Web Interface - Confirm Mode
+Watch the web UI with user approval workflow:
+<video width="100%" controls>
+  <source src="./demo_webUI_confirm_mode_fast.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### Web Interface - Auto Mode
+Watch the web UI in automatic execution mode:
+<video width="100%" controls>
+  <source src="./demo_webUI_auto_mode_fast.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### CLI - Confirm Mode
+Watch the command-line interface with approval workflow:
+<video width="100%" controls>
+  <source src="./demo_cli_confirm_mode_fast.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+### CLI - Auto Mode
+Watch the command-line interface in automatic mode:
+<video width="100%" controls>
+  <source src="./demo_cli_auto_mode_fast.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
 ## 🎮 Usage
 
 ### Web Interface (Recommended)
