@@ -74,33 +74,19 @@ http://127.0.0.1:8000
 
 ## 🎬 Demo Videos
 
-### Web Interface - Confirm Mode
-Watch the web UI with user approval workflow:
-<video width="100%" controls>
-  <source src="./demo_webUI_confirm_mode_fast.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+**Web UI - Confirm Mode** (user approval workflow)
+https://github.com/ParthKalkar/todo-ai-agent/assets/demo_webUI_confirm_mode_fast.mp4
 
-### Web Interface - Auto Mode
-Watch the web UI in automatic execution mode:
-<video width="100%" controls>
-  <source src="./demo_webUI_auto_mode_fast.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+**Web UI - Auto Mode** (instant execution)
+https://github.com/ParthKalkar/todo-ai-agent/assets/demo_webUI_auto_mode_fast.mp4
 
-### CLI - Confirm Mode
-Watch the command-line interface with approval workflow:
-<video width="100%" controls>
-  <source src="./demo_cli_confirm_mode_fast.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+**CLI - Confirm Mode** (command-line with approval)
+https://github.com/ParthKalkar/todo-ai-agent/assets/demo_cli_confirm_mode_fast.mp4
 
-### CLI - Auto Mode
-Watch the command-line interface in automatic mode:
-<video width="100%" controls>
-  <source src="./demo_cli_auto_mode_fast.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+**CLI - Auto Mode** (command-line automatic)
+https://github.com/ParthKalkar/todo-ai-agent/assets/demo_cli_auto_mode_fast.mp4
+
+*All videos are optimized and lightweight (640KB - 1.7MB each)*
 
 ## 🎮 Usage
 
